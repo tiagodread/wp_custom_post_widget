@@ -17,13 +17,13 @@ class Post_Widget extends WP_Widget
     public function widget($args, $instance)
     {
 
-        if(!empty($instance['quantidade'])){
+        if (!empty($instance['quantidade'])) {
             $qtd = $instance['quantidade'];
-        }else{
+        } else {
             $qtd = 1;
         }
         $slides = array();
-        $args = array('post_type' => 'post', 'category_name' => $instance['categoria'], 'nopaging' => false, 'posts_per_page' =>$qtd, 'order' =>'ASC' );
+        $args = array('post_type' => 'post', 'category_name' => $instance['categoria'], 'nopaging' => false, 'posts_per_page' => $qtd, 'order' => 'ASC');
         $slider_query = new WP_Query($args);
         if ($slider_query->have_posts()) {
             while ($slider_query->have_posts()) {
@@ -83,36 +83,14 @@ class Post_Widget extends WP_Widget
         if (isset($instance['quantidade'])) {
             $quantidade = $instance['quantidade'];
         }
-        ?>
-
-        <div class="row">
-            <div class="col-sm-8">
-                <label for="<?php echo $this->get_field_id('quantidade'); ?>"><b>Quantidade de posts:</b></label>
-                <input  required type="number" id="<?php echo $this->get_field_id('quantidade'); ?>" name="<?php echo $this->get_field_name('quantidade'); ?>" min="1" value="<?php echo esc_attr( $quantidade ); ?>">
-
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-8">
-                <label for="<?php echo $this->get_field_id('categoria'); ?>"><b>Selecione a categoria:</b></label>
-                <select name="<?php echo $this->get_field_name('categoria'); ?>" id="<?php echo $this->get_field_id('categoria'); ?>">
-                    <?php $categories = get_categories(array('orderby'=>'name','oder'=>'ASC'));?>
-                    <?php foreach ($categories as $category): ?>
-                        <?php echo '<option value=" '. $category->cat_name .' ">' . $category->cat_name  .'</option>';?>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-
-        <?php
+        require_once (plugin_dir_path(__FILE__) . '../view/slider.php');
     }
 
-    public function update( $new_instance, $old_instance ) {
+    public function update($new_instance, $old_instance)
+    {
         $instance = array();
-        $instance['quantidade'] = ( ! empty( $new_instance['quantidade'] ) ) ? strip_tags( $new_instance['quantidade'] ) : '';
-        $instance['categoria'] = ( ! empty( $new_instance['categoria'] ) ) ? strip_tags( $new_instance['categoria'] ) : '';
+        $instance['quantidade'] = (!empty($new_instance['quantidade'])) ? strip_tags($new_instance['quantidade']) : '';
+        $instance['categoria'] = (!empty($new_instance['categoria'])) ? strip_tags($new_instance['categoria']) : '';
         return $instance;
     }
 }
